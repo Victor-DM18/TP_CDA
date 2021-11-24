@@ -6,8 +6,9 @@ public class Exo3_05 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		float[] nb;
-		nb = new float[2] ;
+		double nbTotal ;
+		double[] nb;
+		nb = new double[2] ;
 		
 		System.out.print("Ecrivez un nombre : ");
 		Scanner sc = new Scanner(System.in);
@@ -16,7 +17,7 @@ public class Exo3_05 {
 			System.out.print("Ecrivez un nombre : ");
 			nb[i] = sc.nextFloat();
 		};
-		sc.close();
+		
 		
 		if(nb[0]==0) {
 			System.out.println("null");
@@ -39,6 +40,21 @@ public class Exo3_05 {
 			else 
 			{System.out.println(nb[1]+" est négatif");
 			}
+		
+		nbTotal = nb[0] * nb[1];
+		
+		if ( nbTotal == 0 ) {
+			System.out.println("null");
+		}
+		else 
+			if (nbTotal > 0) {
+				System.out.println(nbTotal+" est positif");
+				}
+				else 
+				{System.out.println(nbTotal+" est négatif");
+				}
+		
+		sc.close();
 	}
 
 }

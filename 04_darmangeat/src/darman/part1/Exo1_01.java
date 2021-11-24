@@ -5,7 +5,7 @@ public class Exo1_01 {
 		int a = 1;
 		int b = a + 3;
 		a = 3;
-	
-	System.out.println("a = " + a + " et b = "+ b);
+
+		System.out.println("a = " + a + " et b = " + b);
 	}
 }
