@@ -30,11 +30,12 @@ public class item_03 {
 				System.out.println("Il y à qu'une solution : x = -b / (2a)");
 			}else
 				if(delta > 0) {
-					
+					System.out.println("Il y a deux solutions :");
+					double x1 = (-b-Math.sqrt(delta))/(2.*a);
+					double x2 = (-b+Math.sqrt(delta))/(2.*a);
+					System.out.printf("x1 = %f\n",x1);
+					System.out.printf("x2 = %f\n",x2);
 				}
-				
-		
-		
 		
 	}
 
