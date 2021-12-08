@@ -33,7 +33,7 @@ public class Exo7_01 {
 			 i = i + 1;
 		}
 		
-		if(tab[i] == tab[i - 1] + 1 ) {
+		if(tab[i] == tab[i -1 ] + 1 ) {
 			System.out.print("Les nmbres sont conseecutifs");
 		}else {
 		System.out.print("Les nmbres ne sont pas conseecutifs");
