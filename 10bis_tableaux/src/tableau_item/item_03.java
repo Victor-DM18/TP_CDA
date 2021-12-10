@@ -6,6 +6,7 @@ public class item_03 {
 	
 	private static double[] note;
 	private static double moyNote;
+	private static int valIgnore;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -18,11 +19,14 @@ public class item_03 {
 		afficheResult();
 	}
 
+
 	private static void afficheResult() {
 		// TODO Auto-generated method stub
+		
 		System.out.println("la note moyenne est de : " + moyNote);
-		System.out.println("Première case : " + note[0]);
+		System.out.println("Première case : " + note[valIgnore]);
 		System.out.println("dérnière note : " + note[note.length - 1]);
+		System.out.println("dérnière note : " + note[note.length / 2]);
 	}
 
 
@@ -67,7 +71,7 @@ public class item_03 {
 		// TODO Auto-generated method stub
 		
 		double som = 0;
-		int valIgnore = 0;
+		valIgnore = 0;
 		
 		for(int i = 0; i < note.length; i++) {
 			if(note[i] == 0) {
