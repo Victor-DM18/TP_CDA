@@ -1,0 +1,56 @@
+package domain;
+
+public class Livre {
+	//VARIABLE
+	
+	private String titre, auteur;
+	private int nbPages ;
+	
+	Livre(String auteur, String titre, int nbPages) {
+		this.auteur = auteur;
+		this.titre = titre;
+		this.nbPages = nbPages;
+	}
+	
+	
+	//Accesseur
+	public String getAuteur() {
+		return auteur;
+	}
+	
+	public String getTitre() {
+		return titre;
+	}
+	
+	public int getNbPages() {
+		return nbPages;
+	}
+	
+	@Override
+	public String toString() {
+		return "Livre [auteur : " + auteur + "]";
+	}
+	
+	
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+	
+		
+	}
+
+	//Mutator
+	public void setNbPages(int nb) {
+		this.nbPages = nb;
+	}
+
+	public void setTitre(String titre) {
+		this.titre = titre;
+	}
+	
+	public void setAuteur( String auteur) {
+		this.auteur = auteur;
+	}
+
+}

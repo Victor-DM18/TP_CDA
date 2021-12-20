@@ -1,0 +1,33 @@
+package bookstore.test;
+import bookstore.metier.Exo_02_Livre;
+
+public class Exo_03_TestLivre {
+
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Exo_02_Livre l1 = new Exo_02_Livre("Victor", "FakeDev", 54);
+		System.out.println("Le livre l1 : " + l1);
+		bookstore.metier.Exo_02_Livre.afficheToi();
+		System.out.println();
+		
+		Exo_02_Livre l2 = new Exo_02_Livre("Dos Martires", "Clown", 18);
+		System.out.println("Le livre l2 : " + l2);
+		bookstore.metier.Exo_02_Livre.afficheToi();
+		System.out.println();
+		
+		int som =l1.getNbPages() + l2.getNbPages();
+		System.out.println("Somme des pages : " + som);
+		System.out.println();
+
+		Exo_02_Livre l3 = new Exo_02_Livre("Victor", "trueDev", 0);
+		System.out.println("Le livre l1 : " + l3);
+		System.out.println();
+		
+		
+	
+	}
+
+
+}

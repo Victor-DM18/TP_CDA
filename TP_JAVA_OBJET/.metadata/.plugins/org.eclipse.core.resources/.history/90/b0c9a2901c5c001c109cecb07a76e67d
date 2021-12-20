@@ -1,0 +1,38 @@
+package domain;
+
+public class Livre {
+	//VARIABLE
+	
+	private String titre, auteur;
+	private int nbPages ;
+	
+	Livre(String auteur, String titre, int nbPages) {
+		this.auteur = auteur;
+		this.titre = titre;
+		this.nbPages = nbPages;
+	}
+	
+	
+
+	
+	@Override
+	public String toString() {
+		return "Livre [auteur : " + auteur + "]";
+	}
+	
+	
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Livre l1 = new Livre("Victor", "FakeDev", 54);
+		System.out.println("Le livre l1 : " + l1);
+		System.out.println();
+		
+		Livre l2 = new Livre("Dos Martires", "Clown", 45);
+		System.out.println("Le livre l2 : " + l2);
+		
+	}
+
+
+}

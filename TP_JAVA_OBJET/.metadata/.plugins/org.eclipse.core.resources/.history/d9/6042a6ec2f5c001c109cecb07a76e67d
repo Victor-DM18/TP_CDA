@@ -1,0 +1,58 @@
+package bookstore.metier;
+
+
+public class Exo_02_Livre {
+	//VARIABLE
+	
+	private static String titre;
+	private static String auteur;
+	private static int nbPages ;
+	
+	public Exo_02_Livre(String auteur, String titre, int nbPages) {
+		Exo_02_Livre.auteur = auteur;
+		Exo_02_Livre.titre = titre;
+		if( nbPages > 0 ) {		
+			Exo_02_Livre.nbPages = nbPages;
+			}else {
+				throw new IllegalArgumentException("error page number");
+			}
+	}
+	
+	
+	//Accesseur
+	public String getAuteur() {
+		return auteur;
+	}
+	
+	public String getTitre() {
+		return titre;
+	}
+	
+	public int getNbPages() {
+		return nbPages;
+	}
+	
+	//Mutator/setter
+	public void setNbPages(int nbPages) {
+		Exo_02_Livre.nbPages = nbPages;
+	}
+
+	public void setTitre(String titre) {
+		Exo_02_Livre.titre = titre;
+	}
+	
+	public  void setAuteur( String auteur) {
+		Exo_02_Livre.auteur = auteur;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Livre [Nombre de pages : " + nbPages + "]";
+	}
+
+	public static void afficheToi() {
+		System.out.println("Desscription du lvre : " + auteur + " , " + titre + " , " + nbPages + " , ");
+	}
+
+}

@@ -1,0 +1,100 @@
+package bookstore.metier;
+
+public class Exo_02_Livre {
+	// VARIABLE
+
+	private String titre;
+	private String auteur;
+	private int nbPages;
+	private double prix ;
+	
+
+	public Exo_02_Livre() {
+		this(null, null);
+	}
+	
+	public Exo_02_Livre(String auteur, String titre) {
+		this(titre, auteur, (Integer) null);
+	}
+
+	public Exo_02_Livre(String auteur, String titre, int nbPages) {
+		this(auteur,titre,nbPages, (Double) null);
+	}
+	
+	public Exo_02_Livre(String auteur, String titre, int nbPages, double prix) {
+		super();
+		this.setAuteur(auteur).setTitre(titre).setNbPages(nbPages).setPrix(prix);
+	}
+
+
+
+	
+
+	// Accesseur
+	public String getAuteur() {
+		return auteur;
+	}
+
+	public String getTitre() {
+		return titre;
+	}
+
+	public int getNbPages() {
+		return nbPages;
+	}
+	
+	public double getPrix() {
+		
+		return prix;
+	}
+	
+	public String getMessagePrix() {
+		if (prix < 0 ) {
+			return "prix indeterminé";
+		}
+		if (prix == 0) {
+			return "gratuit";
+					}
+		return "" + prix;
+	}
+
+	// Mutator/setter
+	public  Exo_02_Livre setNbPages(int nbPages) {
+		if (nbPages > 0) {
+			this.nbPages = nbPages;
+		} else {
+			throw new IllegalArgumentException("error page number");
+		}
+		return this;
+	}
+
+	public   Exo_02_Livre setTitre(String titre) {
+		this.titre = titre;
+		return this;
+	}
+
+	public  Exo_02_Livre setAuteur(String auteur) {
+		this.auteur = auteur;
+		return this;
+	}
+	
+	public Exo_02_Livre setPrix(double prix) {
+		this.prix = prix;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return "Livre [titre=" + getTitre() 
+		+ ", auteur=" + getAuteur() 
+		+ ", nbPages=" + getNbPages()
+		+ ", prix=" + getPrix()
+		+ "]";
+	}
+
+	public void afficheToi() {
+		System.out.println("Desscription du lvre : " + auteur + " , " + titre + " , " + nbPages + " , ");
+
+	}
+
+}

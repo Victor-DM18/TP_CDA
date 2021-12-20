@@ -1,0 +1,29 @@
+package bookstore.test;
+
+public class Exo_03_TestLivre {
+
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Exo_03_TestLivre l1 = new Exo_03_TestLivre("Victor", "FakeDev", 54);
+		System.out.println("Le livre l1 : " + l1);
+		System.out.println();
+		
+		Exo_03_TestLivre l2 = new Exo_03_TestLivre("Dos Martires", "Clown", 45);
+		System.out.println("Le livre l2 : " + l2);
+		System.out.println();
+		
+		int som =l1.getNbPages() + l2.getNbPages();
+		System.out.println("Somme des pages : " + som);
+		System.out.println();
+
+		Exo_03_TestLivre l3 = new Exo_03_TestLivre("Victor", "trueDev", 0);
+		System.out.println("Le livre l1 : " + l3);
+		System.out.println();
+		
+		
+	
+	}
+
+}

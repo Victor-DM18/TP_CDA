@@ -1,0 +1,77 @@
+package domain;
+
+
+public class Exo_03_Livre {
+	//VARIABLE
+	
+	private String titre, auteur;
+	private int nbPages ;
+	
+	Exo_03_Livre(String auteur, String titre, int nbPages) {
+		this.auteur = auteur;
+		this.titre = titre;
+		if( nbPages > 0 ) {		
+			this.nbPages = nbPages;
+			}else {
+				throw new IllegalArgumentException("error page number");
+			}
+	}
+	
+	
+	//Accesseur
+	public String getAuteur() {
+		return auteur;
+	}
+	
+	public String getTitre() {
+		return titre;
+	}
+	
+	public int getNbPages() {
+		return nbPages;
+	}
+	
+	//Mutator
+	public void setNbPages(int nbPages) {
+		this.nbPages = nbPages;
+	}
+
+	public void setTitre(String titre) {
+		this.titre = titre;
+	}
+	
+	public void setAuteur( String auteur) {
+		this.auteur = auteur;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Livre [Nombre de pages : " + nbPages + "]";
+	}
+	
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Exo_03_Livre l1 = new Exo_03_Livre("Victor", "FakeDev", 54);
+		System.out.println("Le livre l1 : " + l1);
+		System.out.println();
+		
+		Exo_03_Livre l2 = new Exo_03_Livre("Dos Martires", "Clown", 45);
+		System.out.println("Le livre l2 : " + l2);
+		System.out.println();
+		
+		int som =l1.getNbPages() + l2.getNbPages();
+		System.out.println("Somme des pages : " + som);
+		System.out.println();
+
+		Exo_03_Livre l3 = new Exo_03_Livre("Victor", "trueDev", 0);
+		System.out.println("Le livre l1 : " + l3);
+		System.out.println();
+		
+		
+	
+	}
+
+}

@@ -1,0 +1,37 @@
+package domain;
+
+public class Livre {
+	//VARIABLE
+	
+	private String titre, auteur;
+	private int nbPages;
+	
+	//Constructor
+	public Livre(String unAuteur, String unTitre) {
+		auteur = unAuteur;
+		titre = unTitre;
+	}
+	
+	//Accesseur
+	public String getAuteur() {
+		return auteur;
+	}
+	
+	//Mutator
+	void setNbPages(int nb) {
+		nbPages = nb;
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Livre l1 = new Livre("Victor", "FakeDev");
+		System.out.println("Le livre l1 : " + l1);
+		System.out.println();
+		
+		Livre l2 = new Livre("Dos Martires", "Clown");
+		System.out.println("Le livre l2 : " + l2);
+		
+	}
+
+}

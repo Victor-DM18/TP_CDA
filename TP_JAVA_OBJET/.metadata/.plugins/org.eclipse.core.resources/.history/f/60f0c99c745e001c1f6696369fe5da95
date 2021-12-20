@@ -1,0 +1,118 @@
+package bookstore.metier;
+
+public class Exo_02_Livre {
+	// VARIABLE
+
+	private String titre;
+	private String auteur;
+	private int nbPages;
+	private double prix ;
+	public static double gratuit = 0;
+	private boolean prixFixe ;
+	
+	
+
+	public Exo_02_Livre() {
+		this("indetermié", "indeterminé");
+	}
+	
+	public Exo_02_Livre(String auteur, String titre) {
+		this(titre, auteur, 0);
+	}
+
+	public Exo_02_Livre(String auteur, String titre, int nbPages) {
+		this(auteur,titre,nbPages, gratuit);
+	}
+	
+	public Exo_02_Livre(String auteur, String titre, int nbPage, double prix) {
+		this(auteur,titre,nbPage, prix, false);
+	}
+	
+	public Exo_02_Livre(String auteur, String titre, int nbPages, double prix, boolean prixFixe ) {
+		super();
+		this.setAuteur(auteur).setTitre(titre).setNbPages(nbPages).setPrix(prix);
+	}
+
+
+	
+
+	// Accesseur
+	public String getAuteur() {
+		return auteur;
+	}
+
+	public String getTitre() {
+		return titre;
+	}
+
+	public int getNbPages() {
+		return nbPages;
+	}
+	
+	public double getPrix() {
+		
+		return prix;
+	}
+	
+	public String getMessagePrix() {
+		if (prix < 0 ) {
+			return " indeterminé";
+		}
+		if (prix == gratuit) {
+			return "gratuit";
+					}
+		return "" + prix;
+	}
+	
+	public boolean isPrixFixe() {
+		return prixFixe;
+	}
+
+	// Mutator/setter
+	public  Exo_02_Livre setNbPages(int nbPages) {
+		if (nbPages > 0) {
+			this.nbPages = nbPages;
+		} else {
+			throw new IllegalArgumentException("error page number");
+		}
+		return this;
+	}
+
+	public   Exo_02_Livre setTitre(String titre) {	
+		this.titre = titre == null ? " indeterminé" : titre;
+		return this;
+	}
+
+	public  Exo_02_Livre setAuteur(String auteur) {
+		this.auteur = auteur == null ? " indetreminé" : auteur;
+		return this;
+	}
+	
+	public Exo_02_Livre setPrix(double prix) {
+		
+		if(isPrixFixe()) {
+			throw new UnsupportedOperationException("Le prix ne peut pas etre changé");
+		}
+		if(prix < 0) {
+			throw new IllegalArgumentException("Erreur : prix impossible");
+		}
+		this.prixFixe = true;
+		return this;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Livre [titre=" + getTitre() 
+		+ ", auteur=" + getAuteur() 
+		+ ", nbPages=" + getNbPages()
+		+ ", prix=" + getMessagePrix()
+		+ "]";
+	}
+
+	public void afficheToi() {
+		System.out.println("Desscription du lvre : " + auteur + " , " + titre + " , " + nbPages + " , ");
+
+	}
+
+}

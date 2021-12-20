@@ -1,0 +1,10 @@
+package domain;
+
+public class Exo_03_Livre {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

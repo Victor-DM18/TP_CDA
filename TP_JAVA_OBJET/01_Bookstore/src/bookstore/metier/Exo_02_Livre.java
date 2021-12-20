@@ -1,0 +1,143 @@
+package bookstore.metier;
+
+public class Exo_02_Livre {
+	// VARIABLE
+
+	private String titre;
+	private String auteur;
+	private int nbPages;
+	private double prix ;
+	public static double gratuit = 0;
+	private boolean prixFixe ;
+	public static double prix_incorrect = -1;
+	
+	
+
+	public Exo_02_Livre() {
+		this("indetermié", "indeterminé");
+	}
+	
+	public Exo_02_Livre(String auteur, String titre) {
+		this(titre, auteur, 0);
+	}
+
+	public Exo_02_Livre(String auteur, String titre, int nbPages) {
+		this(auteur,titre,nbPages, prix_incorrect);
+	}
+	
+	public Exo_02_Livre(String auteur, String titre, int nbPage, double prix) {
+		this(auteur,titre,nbPage, prix, false);
+	}
+	
+	public Exo_02_Livre(String auteur, String titre, int nbPages, double prix, boolean prixFixe ) {
+		super();
+		this.setAuteur(auteur).setTitre(titre).setNbPages(nbPages).setPrix(prix);
+	}
+
+
+	// Accesseur
+	public String getAuteur() {
+		return auteur;
+	}
+
+	public String getTitre() {
+		return titre;
+	}
+
+	public int getNbPages() {
+		return nbPages;
+	}
+	
+	public double getPrix() {
+		
+		return prix;
+	}
+	
+	public String getMessagePrix() {
+		if (prix < 0 ) {
+			return " indeterminé";
+		}else
+			if (prix == gratuit) {
+			return "gratuit";
+					}
+		
+		return ""+ prix;
+					
+	}
+	
+	public boolean isPrixFixe() {
+		return prixFixe;
+	}
+
+	// Mutator/setter
+	public  Exo_02_Livre setNbPages(int nbPages) {
+		if (nbPages > 0) {
+			this.nbPages = nbPages;
+		} else {
+			throw new IllegalArgumentException("error page number");
+		}
+		return this;
+	}
+
+	public   Exo_02_Livre setTitre(String titre) {	
+		this.titre = titre == null ? " indeterminé" : titre;
+		return this;
+	}
+
+	public  Exo_02_Livre setAuteur(String auteur) {
+		this.auteur = auteur == null ? " indetreminé" : auteur;
+		return this;
+	}
+	
+	public Exo_02_Livre setPrix(double prix) {
+		
+		if(isPrixFixe()) {
+			throw new UnsupportedOperationException("Le prix ne peut pas etre changé");
+		}
+		if(prix < prix_incorrect) {
+			throw new IllegalArgumentException("Erreur : prix impossible");
+		}
+		this.prix = prix;
+		this.prixFixe = true;
+		return this;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Livre [titre=" + getTitre() 
+		+ ", auteur=" + getAuteur() 
+		+ ", nbPages=" + getNbPages()
+		+ ", prix=" + getMessagePrix()
+		+ ", prixfixe=" + isPrixFixe()
+		+ "]";
+	}
+
+	public void afficheToi() {
+		System.out.println("Desscription du lvre : " + auteur + " , " + titre + " , " + nbPages + " , ");
+
+	} 
+	
+	public int compare(Exo_02_Livre l) {
+		if(this.getNbPages() > l.getNbPages()) {
+			return 1;
+		}else
+			if(this.getNbPages() < l.getNbPages()) {
+				return -1;
+			}else {
+				return 0;
+			}
+	}
+	
+	public int compare2(Exo_02_Livre l1, Exo_02_Livre l2) {
+			if(l1.getNbPages() < l2.getNbPages()) {
+				return -1;	
+			}
+			else if(l1.getNbPages() > l2.getNbPages()) {
+				return 1;
+			}else {
+				return 0;
+			}
+	}
+
+}
