@@ -1,0 +1,67 @@
+============
+EXERCICE 1
+============
+
+┌─(~/Documents/Dos_Martires_TP3_java)─────────────────────────────────────────────────────────────────────────────────────────────(vikito@MacBook-Air-de-Victor:s000)─┐
+└─(09:10:06)──> javac Version1.java                                                                                                                 1 ↵ ──(Ven,nov05)─┘
+┌─(~/Documents/Dos_Martires_TP3_java)─────────────────────────────────────────────────────────────────────────────────────────────(vikito@MacBook-Air-de-Victor:s000)─┐
+└─(09:13:46)──> java Version1                                                                                                                           ──(Ven,nov05)─┘
+Nom du cavalier : 
+Dos DMartires
+Prenom du cavalier      : 
+Victor
+
+
+Cavalier : |    Victor Dos DMartires
+
+
+Voulez-vous continuer (O/N) ? o
+Nom du cavalier : 
+DOS MARTIRES
+Prenom du cavalier      : 
+Victor
+
+
+Cavalier : |    Victor DOS MARTIRES
+
+
+Voulez-vous continuer (O/N) ? n
+┌─(~/Documents/Dos_Martires_TP3_java)─────────────────────────────────────────────────────────────────────────────────────────────(vikito@MacBook-Air-de-Victor:s000)─┐
+└─(09:14:38)──>                    
+
+
+=============
+EXERCICCE 2
+=============   
+
+┌─(~/Documents/Dos_Martires_TP3_java)────────────────(vikito@MacBook-Air-de-Victor:s000)─┐
+└─(11:47:36)──> javac Version2.java                                    1 ↵ ──(Ven,nov05)─┘
+┌─(~/Documents/Dos_Martires_TP3_java)────────────────(vikito@MacBook-Air-de-Victor:s000)─┐
+└─(11:48:04)──> java Version2                                              ──(Ven,nov05)─┘
+Nom du cavalier: 
+dos martires                 
+Prenom du cavalier: 
+Victor
+Adresse du cavalier: 
+32 rue xxxxxxxxx
+Cheval preferes: 
+Fanta 
+Cheval preferes: Coca
+Cheval preferes: Sprite
+No carte FNTE: 
+6396002394
+
+
+Cavalier no :   6396002394
+        Victor DOS MARTIRES
+        32 rue xxxxxxxxx
+        cheval:  Fanta Coca Sprite
+
+Voulez-vous continuer (O/N)? 
+e
+Voulez-vous continuer (O/N)? 
+d
+Voulez-vous continuer (O/N)? 
+n
+┌─(~/Documents/Dos_Martires_TP3_java)────────────────(vikito@MacBook-Air-de-Victor:s000)─┐
+└─(11:49:14)──>                 
