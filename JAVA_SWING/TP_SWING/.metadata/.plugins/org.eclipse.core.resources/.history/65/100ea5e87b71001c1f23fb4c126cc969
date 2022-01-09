@@ -1,0 +1,64 @@
+package domain;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class MyApp extends JFrame {
+
+	private JPanel getContentPane;
+	private JTextField txtPseudo;
+	private JButton btnAnnuler;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MyApp frame = new MyApp();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MyApp() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		getContentPane = new JPanel();
+		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane.setLayout(new BorderLayout());
+		setContentPane(getContentPane);
+		
+		JLabel lblEnterPseudo = new JLabel("Entrez votre pseudo");
+		lblEnterPseudo.setHorizontalAlignment(SwingConstants.CENTER);
+		getContentPane.add(lblEnterPseudo, BorderLayout.NORTH);
+		
+		txtPseudo = new JTextField();
+		getContentPane.add(txtPseudo, BorderLayout.NORTH);
+		txtPseudo.setColumns(10);
+	.
+		btnAnnuler = new JButton("Annuler");
+		btnAnnuler.setPreferredSize(new Dimension(100,75));
+		getContentPane.add(btnAnnuler, BorderLayout.WEST);
+	}
+
+}

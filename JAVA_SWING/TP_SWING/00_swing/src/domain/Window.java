@@ -1,0 +1,81 @@
+package domain;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
+
+public class Window extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+
+	public Window() {
+		super("myWindow");
+		getContentPane().setBackground(Color.GRAY);
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setSize(600, 437);
+		this.setLocationRelativeTo( null );
+		
+		JPanel contentPanel = (JPanel) this.getContentPane();
+		contentPanel.setLayout( new FlowLayout() );
+		JButton button = new JButton("click here !!");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JMenuBar menuBar = new JMenuBar();
+		getContentPane().add(menuBar);
+		
+		JButton btnNewButton = new JButton("New button");
+		menuBar.add(btnNewButton);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("New check box");
+		menuBar.add(chckbxNewCheckBox);
+		
+		JProgressBar progressBar = new JProgressBar();
+		menuBar.add(progressBar);
+		
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
+		menuBar.add(rdbtnNewRadioButton);
+		contentPanel.add(button);
+		
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setValue(10);
+		scrollBar.setUnitIncrement(10);
+		scrollBar.setOrientation(JScrollBar.HORIZONTAL);
+		getContentPane().add(scrollBar);
+		contentPanel.add(new JButton("click here !!"));
+		contentPanel.add(new JCheckBox ("check me !!"));
+		contentPanel.add(new JTextField("edit me !!"));
+
+
+	}
+
+	public static void main(String[] args) throws Exception   {
+		// TODO Auto-generated method stub
+		
+		// Apply LookEndFeel
+		
+		UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		
+		// start Windows
+
+		Window myWindow = new Window();
+		myWindow.setVisible( true );
+
+	}
+
+}

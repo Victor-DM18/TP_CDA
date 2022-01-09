@@ -1,0 +1,36 @@
+package domain;
+
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class Window extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+
+	public Window() {
+		super("myWindow");
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setSize(600, 400);
+		this.setLocationRelativeTo( null );
+		
+		JPanel contentPanel = (JPanel) this.getContentPane();
+		contentPanel.setLayout( new FlowLayout() );
+		contentPanel.add(new JButton("click here !!"));
+		contentPanel.add(new JButton("click here !!"));
+		contentPanel.add(new JButton("click here !!"));
+		contentPanel.add(new JButton("click here !!"));
+
+
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Window myWindow = new Window();
+		myWindow.setVisible( true );
+
+	}
+
+}

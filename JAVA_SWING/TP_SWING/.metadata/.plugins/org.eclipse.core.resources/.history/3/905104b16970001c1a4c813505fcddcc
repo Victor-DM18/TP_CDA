@@ -1,0 +1,24 @@
+package domain;
+
+import javax.swing.JFrame;
+
+public class Window extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+
+	public Window() {
+		super("myWindow");
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setSize(600, 400);
+		this.setLocation(500, 250);
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Window myWindow = new Window();
+		myWindow.setVisible(true);
+
+	}
+
+}

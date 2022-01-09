@@ -1,0 +1,115 @@
+package domain;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class MyApp extends JFrame {
+
+	private JPanel getContentPane;
+	private JTextField txtPseudo;
+	private JButton btnAnnuler;
+	private JLabel lblVoici;
+	private JButton btnEffacer;
+	private JButton btnOk;
+	private JTextField txtAffichePseudo;
+	private String text;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MyApp frame = new MyApp();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MyApp() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		getContentPane = new JPanel();
+		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane.setLayout(new BorderLayout(20, 30));
+		setContentPane(getContentPane);
+
+		// TOP
+		JPanel top = new JPanel();
+		getContentPane.add(top, BorderLayout.NORTH);
+		top.setLayout(new FlowLayout());
+		JLabel lblEnterPseudo = new JLabel("Entrez votre pseudo");
+		lblEnterPseudo.setHorizontalAlignment(SwingConstants.CENTER);
+		top.add(lblEnterPseudo);
+
+		txtPseudo = new JTextField();
+		top.add(txtPseudo);
+		txtPseudo.setText(text);
+		txtPseudo.setColumns(10);
+
+		// MIDDLE
+		JPanel middle = new JPanel();
+		middle.setLayout(new FlowLayout(0, 30, 15));
+		getContentPane.add(middle);
+		btnAnnuler = new JButton("Annuler");
+		btnAnnuler.setVerticalAlignment(SwingConstants.CENTER);
+
+		btnAnnuler.addActionListener( e -> {
+			this.dispose();
+		});
+		btnAnnuler.setPreferredSize(new Dimension(100, 50));
+		middle.add(btnAnnuler, BorderLayout.WEST);
+
+		btnEffacer = new JButton("Effacer");
+		btnEffacer.setPreferredSize(new Dimension(100, 50));
+		middle.add(btnEffacer, BorderLayout.CENTER);
+
+
+		btnOk = new JButton("OK");
+		btnOk.setPreferredSize(new Dimension(100, 100));
+		middle.add(btnOk, BorderLayout.EAST);
+		
+		btnOk.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnOk_onClick(e);
+			}
+		});
+
+		// BOTTON
+
+		JPanel botton = new JPanel();
+		getContentPane.add(botton, BorderLayout.SOUTH);
+		lblVoici = new JLabel("New label");
+		botton.add(lblVoici, BorderLayout.SOUTH);
+		
+		txtAffichePseudo = new JTextField();
+		botton.add(txtAffichePseudo);
+		txtAffichePseudo.setColumns(10);
+		
+		
+	}
+	
+	private void btnOk_onClick(ActionEvent e) {
+		txtAffichePseudo.setText(this.text);
+	}
+
+}

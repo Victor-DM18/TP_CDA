@@ -1,0 +1,21 @@
+package domain;
+
+import javax.swing.JFrame;
+
+public class Window extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+
+	public Window() {
+		super("myWindow");
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Window myWindow = new Window();
+		myWindow.setVisible(true);
+
+	}
+
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="javax.swing.JFrame"/>
+    <fullyQualifiedTypeName name="javax.swing.JPanel"/>
+    <fullyQualifiedTypeName name="javax.swing.JCheckBox"/>
+    <fullyQualifiedTypeName name="javax.swing.UIManager"/>
+    <fullyQualifiedTypeName name="javax.swing.plaf.nimbus.NimbusLookAndFeel"/>
+    <fullyQualifiedTypeName name="javax.swing.plaf.synth.SynthLookAndFeel"/>
+    <fullyQualifiedTypeName name="javax.swing.plaf.multi.MultiLookAndFeel"/>
+    <fullyQualifiedTypeName name="javax.swing.plaf.metal.MetalLookAndFeel"/>
+    <fullyQualifiedTypeName name="javax.swing.plaf.basic.BasicLookAndFeel"/>
+</qualifiedTypeNameHistroy>
