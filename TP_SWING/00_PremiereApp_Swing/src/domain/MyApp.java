@@ -6,6 +6,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
+import java.awt.Point;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -60,34 +63,33 @@ public class MyApp extends JFrame {
 		// TOP
 		JPanel top = new JPanel();
 		getContentPane.add(top, BorderLayout.NORTH);
-		top.setLayout(new FlowLayout());
 		JLabel lblEnterPseudo = new JLabel("Entrez votre pseudo");
 		lblEnterPseudo.setHorizontalAlignment(SwingConstants.CENTER);
-		top.add(lblEnterPseudo);
+		top.add(lblEnterPseudo, BorderLayout.NORTH);
 
 		txtPseudo = new JTextField();
-		top.add(txtPseudo);
 		txtPseudo.setColumns(10);
+		top.add(txtPseudo);
 
 		// MIDDLE
 		JPanel middle = new JPanel();
-		middle.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 5));
-		middle.setAlignmentY(Component.CENTER_ALIGNMENT);
-		middle.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+		middle.setLayout(new BorderLayout(20, 40));
 
 		getContentPane.add(middle);
+		middle.setLayout(new GridLayout(1,3, 40, 40));
 		btnAnnuler = new JButton("Annuler");
-
 		btnAnnuler.addActionListener( e -> {
 			this.dispose();
 		});
 		btnAnnuler.setPreferredSize(new Dimension(100, 50));
+		btnAnnuler.setLayout(new BorderLayout());
 		middle.add(btnAnnuler, BorderLayout.WEST);
 
 
 		btnEffacer = new JButton("Effacer");
 		btnEffacer.setPreferredSize(new Dimension(100, 50));
+		btnEffacer.setMaximumSize( new Dimension(2000,50));
+		
 		middle.add(btnEffacer, BorderLayout.CENTER);
 		
 		btnEffacer.addActionListener(new ActionListener() {
@@ -98,7 +100,7 @@ public class MyApp extends JFrame {
 
 
 		btnOk = new JButton("OK");
-		btnOk.setPreferredSize(new Dimension(100, 100));
+		btnOk.setPreferredSize(new Dimension(100,200));
 		middle.add(btnOk, BorderLayout.EAST);
 		
 		btnOk.addActionListener( new ActionListener() {
@@ -129,5 +131,6 @@ public class MyApp extends JFrame {
 		txtPseudo.setText("");
 		txtAffichePseudo.setText("");
 	}
+	
 	
 }
