@@ -1,0 +1,131 @@
+package biblio.control;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Properties;
+
+import javax.swing.JOptionPane;
+
+import biblio.dao.ConnectionFactory;
+import biblio.dao.EmpruntArchiveDAO;
+import biblio.dao.EmpruntEnCoursDao;
+import biblio.dao.ExemplaireDAO;
+import biblio.dao.UtilisateurDao;
+import biblio.domain.EmpruntArchive;
+import biblio.domain.EmpruntEnCours;
+import biblio.domain.Exemplaire;
+import biblio.domain.Utilisateur;
+
+public class Emprunter {
+
+	private String driver, url, utilisateur, pwd;
+
+	public static void main(String[] args) throws Exception {
+		System.out.println("+-------------------------------------------+");
+
+		Properties props = new Properties();
+		try (FileReader fis = new FileReader("biblio.properties")) {
+			props.load(fis);
+
+			Class.forName(props.getProperty("driver"));
+		} catch (ClassNotFoundException | IOException e) {
+			System.out.println("Driver inconnu - " + e.getMessage());
+			System.exit(1);
+		}
+
+		String dbDriver = props.getProperty("driver");
+		String dbUrl = props.getProperty("url");
+		String dbLogin = props.getProperty("user");
+		String dbPwd = props.getProperty("pwd");
+		ConnectionFactory cf = new ConnectionFactory();
+		Connection cnx1 = null;
+		cnx1 = cf.getConnectionSansAutoCommit(dbDriver, dbUrl, dbLogin, dbPwd);
+
+		EmpruntEnCoursDao empruntDao = new EmpruntEnCoursDao(cnx1);
+		ExemplaireDAO exemplaireDao = new ExemplaireDAO(cnx1);
+		EmpruntArchiveDAO archiveDao = new EmpruntArchiveDAO(cnx1);
+		UtilisateurDao utilisateurDao = new UtilisateurDao(cnx1);
+		int idUtilisateur = Integer.parseInt(JOptionPane.showInputDialog("Entrez l'id de l'utilisateur qui emprunte"));
+		int idExemplaire = Integer.parseInt(JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter"));
+		Date dateNow = new Date(System.currentTimeMillis());
+		boolean isAvailable = isAvailable = empruntDao.isAvailable(idExemplaire);
+		;
+
+		Util.print("Utilisateur ID : " + String.valueOf(idUtilisateur));
+		Util.print("Exemplaire ID : " + String.valueOf(idExemplaire));
+
+		if (!isAvailable) {
+			Util.print("Ce livre n'est pas disponible !");
+			Util.print("Au revoir !");
+
+			return;
+		}
+
+		Utilisateur utilisateur = utilisateurDao.findById(idUtilisateur);
+
+		if (utilisateur.getCategorieUtilisateur() != "EMPLOYE") {
+			int nbrEmprunt = empruntDao.countByUtilisateurId(idUtilisateur);
+			int maxRetard = archiveDao.compterMaxRetardParUtilisateurId(idUtilisateur);
+
+			if (nbrEmprunt > 2) {
+				Util.print("Vous avez emprunté trop de livre !");
+				Util.print("Au revoir !");
+
+				return;
+			}
+
+			if (maxRetard > 15) {
+				Util.print("Vous avez dépassé un retard de 15 jours sur un ancien emprunt !");
+				Util.print("Vous n'êtes plus autorisé à emprunter !");
+				Util.print("Au revoir !");
+
+				return;
+			}
+
+			empruntDao.insertEmpruntEnCours(new EmpruntEnCours(idUtilisateur, idExemplaire, dateNow));
+			exemplaireDao.changeStatusByExemplaireId(idExemplaire, false);
+
+			Util.print("Le livre est à vous !");
+			Util.print("Au revoir !");
+
+			return;
+		}
+	}
+
+	public String getDriver() {
+		return driver;
+	}
+
+	public void setDriver(String driver) {
+		this.driver = driver;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUser() {
+		return utilisateur;
+	}
+
+	public void setUser(String user) {
+		this.utilisateur = user;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
+}

@@ -1,0 +1,401 @@
+package biblio.control;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Properties;
+
+import javax.swing.JOptionPane;
+import javax.swing.text.Caret;
+
+import biblio.dao.ConnectionFactory;
+import biblio.dao.EmpruntArchiveDAO;
+import biblio.dao.EmpruntEnCoursDao;
+import biblio.dao.ExemplaireDAO;
+import biblio.dao.UtilisateurDao;
+import biblio.domain.EmpruntArchive;
+import biblio.domain.EmpruntEnCours;
+import biblio.domain.Exemplaire;
+import biblio.domain.Utilisateur;
+
+public class Emprunter {
+
+	private String driver, url, user, pwd;
+
+	public static void main(String[] args)  {
+
+		Properties props = new Properties();
+		try (FileReader fis = new FileReader("biblio.properties")) {
+			props.load(fis);
+
+			Class.forName(props.getProperty("driver"));
+		} catch (ClassNotFoundException | IOException e) {
+			System.out.println("Driver inconnu - " + e.getMessage());
+			System.exit(1);
+		}
+
+		String dbDriver = props.getProperty("driver");
+		String dbUrl = props.getProperty("url");
+		String dbLogin = props.getProperty("user");
+		String dbPwd = props.getProperty("pwd");
+
+		ConnectionFactory cf = new ConnectionFactory();
+
+		Connection cnx1 = null;
+
+		try {
+			//cnx1 = cf.getConnection(dbDriver, dbUrl, dbLogin, dbPwd);
+
+			cnx1 = cf.getConnectionSansAutoCommit(dbDriver, dbUrl, dbLogin, dbPwd);
+			System.out.println("-------------------------------------");
+			System.out.println("VOUS ETE CONNECTÉ !");
+			System.out.println("-------------------------------------");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		EmpruntEnCoursDao insert = new EmpruntEnCoursDao(cnx1);
+		ExemplaireDAO exemplaire = new ExemplaireDAO(cnx1); 
+		EmpruntArchiveDAO archive = new EmpruntArchiveDAO(cnx1);
+
+
+		System.out.println("-------------------------------------");
+		System.out.println(" LISTE EMPRUNT_EN_COURS !");
+		System.out.println("-------------------------------------");
+
+		
+
+	
+
+		String idUtilisateur = JOptionPane.showInputDialog("Entrez l'id de l'utilisateur qui emprunte");
+		int idutilisateur = Integer.parseInt(idUtilisateur);
+		
+		String idExemplaire = JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter");
+		int idexemplaire = Integer.parseInt(idExemplaire);
+		
+		Date dateEmprunt = new Date(System.currentTimeMillis());
+		
+		
+		
+		// String idUtilisateur2 = JOptionPane.showInputDialog("Entrez l'id de
+		// l'utilisateur qui emprunte");
+		// int idutilisateur2 = Integer.parseInt(idUtilisateur2);
+		
+		/*
+		 * String idExemplaire2 =
+		 * JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter"); int
+		 * idexemplaire2 = Integer.parseInt(idExemplaire2);
+		 * 
+		 * Date dateEmprunt2 = new Date(System.currentTimeMillis());
+		 */
+
+		
+		// String idUtilisateur3 = JOptionPane.showInputDialog("Entrez l'id de
+		// l'utilisateur qui emprunte");
+		// int idutilisateur3 = Integer.parseInt(idUtilisateur3);
+		
+		/*
+		 * String idExemplaire3 =
+		 * JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter"); int
+		 * idexemplaire3 = Integer.parseInt(idExemplaire3);
+		 * 
+		 * Date dateEmprunt3 = new Date(System.currentTimeMillis());
+		 */
+		
+		
+		
+		/*
+		 * String idExemplaire4 =
+		 * JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter"); int
+		 * idexemplaire4 = Integer.parseInt(idExemplaire4);
+		 * 
+		 * Date dateEmprunt4 = new Date(System.currentTimeMillis());
+		 */
+		 
+
+
+		
+		
+		ArrayList<EmpruntEnCours> listEmprunt = new ArrayList<EmpruntEnCours>();
+		ArrayList<EmpruntEnCours> listEmprunt2 = new ArrayList<EmpruntEnCours>();
+
+
+		
+		Utilisateur ui = new Utilisateur();
+		
+		
+		EmpruntArchive ar = new EmpruntArchive();
+
+		EmpruntArchive ear = new EmpruntArchive(ar.getIdEmpruntArchive(), ar.getDateEmprunt(), ar.getDateRestitutionEff(), idexemplaire, idutilisateur);
+
+		EmpruntArchive ear2 = new EmpruntArchive(ar.getIdEmpruntArchive(), ar.getDateEmprunt(), ar.getDateRestitutionEff(), ar.getIdExemplaire(), idutilisateur);
+
+		
+		ui = insert.findByUi(idutilisateur);
+		System.out.println(ui);
+		
+		String cat = ui.getCategorieUtilisateur();
+
+		try {
+			listEmprunt = insert.findAll();
+			System.out.println(listEmprunt);
+		
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	
+
+	
+
+			System.out.println("-------------------------------------");
+			System.out.println(" CREATION D'UN EMPRUNT D'EXEMPLAIRE !");
+			System.out.println("-------------------------------------");
+			
+			
+			try {
+				listEmprunt2 = insert.findByUtilisateur(idutilisateur);
+				System.out.print(listEmprunt2);
+
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				
+			}
+			
+	
+
+			try {
+				ar = insert.findByKeyArchive(idutilisateur, idexemplaire);
+				System.out.println("---------------");
+				System.out.println(ar);
+				System.out.println("---------------");
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			Date dr = ear.getDateRestitutionEff();
+			Date de = ear.getDateEmprunt();
+			
+			if (dr.compareTo(de) > 0 ) {
+				long diff = dr.getTime() - de.getTime();
+				long res = (diff/(100*60*60*24));
+				
+				System.out.println(res);
+			
+				int count =listEmprunt2.size();
+
+
+			if ( (count >= 3 && cat.equals("ADHERENT")) || res > 15) {
+				
+				System.out.println("count = " + count);
+				System.out.println("3 emprunt maximum !!!");
+			} else {
+				try {
+					
+					EmpruntEnCours emprunt1 = new EmpruntEnCours(idexemplaire, idutilisateur, dateEmprunt);
+					Exemplaire ex = new Exemplaire();
+			        Exemplaire delete = new Exemplaire(idexemplaire, ex.getDateAchat(), ex.getStatus(), null);	
+
+					insert.insertEmpruntEnCours(emprunt1);
+					insert.UpdateExemplaire(delete);
+					System.out.println(emprunt1);
+
+
+					System.out.println("\n EMPRUNT 1 confirmé !");
+
+				} catch (SQLException e) {
+					System.out.println("\n EMPRUNT 1 refusé !");
+
+					e.printStackTrace();
+				}
+
+			}
+			}
+
+			System.out.println("-------------------------------------");
+
+
+			/*
+			 * if (c[idutilisateur] >= 3 && cat == "ADHERENT") {
+			 * System.out.println("3 emprunt maximum !!!");
+			 * 
+			 * } else { try {
+			 * 
+			 * 
+			 * EmpruntEnCours emprunt2 = new EmpruntEnCours(idexemplaire2, idutilisateur,
+			 * dateEmprunt2);
+			 * 
+			 * Exemplaire ex = new Exemplaire(); Exemplaire delete = new
+			 * Exemplaire(idexemplaire2, ex.getDateAchat(), ex.getStatus(), null);
+			 * 
+			 * insert.insertEmpruntEnCours(emprunt2); insert.UpdateExemplaire(delete);
+			 * 
+			 * System.out.println(emprunt2);
+			 * 
+			 * System.out.println("\n EMPRUNT 2 confirmé !");
+			 * 
+			 * 
+			 * } catch (SQLException e) { System.out.println("\n EMPRUNT 2 refusé !");
+			 * 
+			 * 
+			 * e.printStackTrace(); }
+			 * 
+			 * 
+			 * } System.out.println("-------------------------------------");
+			 * 
+			 * 
+			 * if (c[idutilisateur] >= 3 && cat == "ADHERENT") {
+			 * System.out.println("3 emprunt maximum !!!");
+			 * 
+			 * 
+			 * } else { try {
+			 * 
+			 * 
+			 * EmpruntEnCours emprunt3 = new EmpruntEnCours(idexemplaire3, idutilisateur,
+			 * dateEmprunt3);
+			 * 
+			 * Exemplaire ex = new Exemplaire(); Exemplaire delete = new
+			 * Exemplaire(idexemplaire3, ex.getDateAchat(), ex.getStatus(), null);
+			 * 
+			 * insert.insertEmpruntEnCours(emprunt3); insert.UpdateExemplaire(delete);
+			 * 
+			 * System.out.println(emprunt3);
+			 * 
+			 * System.out.println("\n EMPRUNT 3 confirmé !");
+			 * 
+			 * } catch (SQLException e) { System.out.println("\n EMPRUNT 3 refusé !");
+			 * 
+			 * e.printStackTrace(); }
+			 * 
+			 * 
+			 * }
+			 * 
+			 * 
+			 * 
+			 * if (c[idutilisateur] >= 3 && cat == "ADHERENT") {
+			 * System.out.println("3 emprunt maximum !!!");
+			 * 
+			 * } else { try {
+			 * 
+			 * 
+			 * EmpruntEnCours emprunt4 = new EmpruntEnCours(idexemplaire4, idutilisateur,
+			 * dateEmprunt4);
+			 * 
+			 * Exemplaire ex = new Exemplaire(); Exemplaire delete = new
+			 * Exemplaire(idexemplaire4, ex.getDateAchat(), ex.getStatus(), null);
+			 * 
+			 * insert.insertEmpruntEnCours(emprunt4); insert.UpdateExemplaire(delete);
+			 * 
+			 * System.out.println(emprunt4);
+			 * 
+			 * System.out.println("\n EMPRUNT 4 confirmé !");
+			 * 
+			 * 
+			 * } catch (SQLException e) { System.out.println("\n EMPRUNT 4 refusé !");
+			 * 
+			 * 
+			 * e.printStackTrace(); }
+			 * 
+			 * 
+			 * }
+			 */
+			 
+
+			// System.out.println("Emprunt créé : " +
+			// insert.findByKey(emprunt.getIdExemplaire()));
+
+
+	
+
+		try {
+			System.out.println("\n\n-------------------------------------");
+			System.out.println(" EMPRUNT PAR ID_EXEMPLAIRE !");
+			System.out.println("-------------------------------------");
+		
+			EmpruntEnCours id = new EmpruntEnCours();
+
+			EmpruntEnCours emprunt5 = new EmpruntEnCours(id.getIdExemplaire(), idutilisateur, dateEmprunt);
+			
+
+			emprunt5 = insert.findByKey();
+			
+			System.out.println(emprunt5);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println("\n\n-------------------------------------");
+		System.out.println(" LISTE EMPRUNT_EN_COURS !");
+		System.out.println("-------------------------------------");
+
+
+		try {
+			listEmprunt = insert.findAll();
+			System.out.println(listEmprunt);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		ArrayList<Exemplaire> listExemplaire = new ArrayList<Exemplaire>();
+		
+		try {
+			listExemplaire = exemplaire.findAll();
+			System.out.println(listExemplaire);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+
+		
+
+	}
+
+	public String getDriver() {
+		return driver;
+	}
+
+	public void setDriver(String driver) {
+		this.driver = driver;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
+}

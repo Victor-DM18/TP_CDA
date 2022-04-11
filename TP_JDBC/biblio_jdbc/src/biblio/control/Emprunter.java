@@ -6,21 +6,26 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
 import biblio.dao.ConnectionFactory;
+import biblio.dao.EmpruntArchiveDAO;
 import biblio.dao.EmpruntEnCoursDao;
+import biblio.dao.ExemplaireDAO;
+import biblio.dao.UtilisateurDao;
+import biblio.domain.EmpruntArchive;
 import biblio.domain.EmpruntEnCours;
+import biblio.domain.Exemplaire;
+import biblio.domain.Utilisateur;
 
 public class Emprunter {
 
-	private String driver, url, user, pwd;
+	private String driver, url, utilisateur, pwd;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		System.out.println("+-------------------------------------------+");
 
 		Properties props = new Properties();
 		try (FileReader fis = new FileReader("biblio.properties")) {
@@ -36,145 +41,58 @@ public class Emprunter {
 		String dbUrl = props.getProperty("url");
 		String dbLogin = props.getProperty("user");
 		String dbPwd = props.getProperty("pwd");
-
 		ConnectionFactory cf = new ConnectionFactory();
-
 		Connection cnx1 = null;
+		cnx1 = cf.getConnection(dbDriver, dbUrl, dbLogin, dbPwd);
 
-		try {
-			cnx1 = cf.getConnectionSansAutoCommit(dbDriver, dbUrl, dbLogin, dbPwd);
-			System.out.println("-------------------------------------");
-			System.out.println("VOUS ETE CONNECTÉ !");
-			System.out.println("-------------------------------------");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		EmpruntEnCoursDao empruntDao = new EmpruntEnCoursDao(cnx1);
+		ExemplaireDAO exemplaireDao = new ExemplaireDAO(cnx1);
+		EmpruntArchiveDAO archiveDao = new EmpruntArchiveDAO(cnx1);
+		UtilisateurDao utilisateurDao = new UtilisateurDao(cnx1);
+		int idUtilisateur = Integer.parseInt(JOptionPane.showInputDialog("Entrez l'id de l'utilisateur qui emprunte"));
+		int idExemplaire = Integer.parseInt(JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter"));
+		Date dateNow = new Date(System.currentTimeMillis());
+		boolean isAvailable = empruntDao.isAvailable(idExemplaire);
+
+		Util.print("Utilisateur ID : " + String.valueOf(idUtilisateur));
+		Util.print("Exemplaire ID : " + String.valueOf(idExemplaire));
+
+		if (!isAvailable) {
+			Util.print("Ce livre n'est pas disponible !");
+			Util.print("Au revoir !");
+
+			return;
 		}
 
-		EmpruntEnCoursDao insert = new EmpruntEnCoursDao(cnx1);
+		Utilisateur utilisateur = utilisateurDao.findById(idUtilisateur);
 
-		System.out.println("-------------------------------------");
-		System.out.println(" EMPRUNT_EN_COURS !");
-		System.out.println("-------------------------------------");
+		if (utilisateur.getCategorieUtilisateur() != "EMPLOYE") {
+			int nbrEmprunt = empruntDao.countByUtilisateurId(idUtilisateur);
+			int maxRetard = archiveDao.compterMaxRetardParUtilisateurId(idUtilisateur);
 
-		ArrayList<EmpruntEnCours> listEmprunt = new ArrayList<EmpruntEnCours>();
+			if (nbrEmprunt > 2) {
+				Util.print("Vous avez emprunté trop de livre !");
+				Util.print("Au revoir !");
 
-		try {
-			listEmprunt = insert.findAll();
-			System.out.println(listEmprunt);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		String idUtilisateur = JOptionPane.showInputDialog("Entrez l'id de l'utilisateur qui emprunte");
-		int idutilisateur = Integer.parseInt(idUtilisateur);
-
-		String idExemplaire = JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter");
-		int idexemplaire = Integer.parseInt(idExemplaire);
-
-		Date dateEmprunt = new Date(System.currentTimeMillis());
-
-		String idExemplaire2 = JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter");
-		int idexemplaire2 = Integer.parseInt(idExemplaire2);
-
-		// String idUtilisateur2 = JOptionPane.showInputDialog("Entrez l'id de
-		// l'utilisateur qui emprunte");
-		// int idutilisateur2 = Integer.parseInt(idUtilisateur2);
-
-		Date dateEmprunt2 = new Date(System.currentTimeMillis());
-
-		String idExemplaire3 = JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter");
-		int idexemplaire3 = Integer.parseInt(idExemplaire3);
-
-		// String idUtilisateur3 = JOptionPane.showInputDialog("Entrez l'id de
-		// l'utilisateur qui emprunte");
-		// int idutilisateur3 = Integer.parseInt(idUtilisateur3);
-
-		Date dateEmprunt3 = new Date(System.currentTimeMillis());
-
-		EmpruntEnCours emprunt = new EmpruntEnCours(idexemplaire, idutilisateur, dateEmprunt);
-		EmpruntEnCours emprunt2 = new EmpruntEnCours(idexemplaire2, idutilisateur, dateEmprunt2);
-		EmpruntEnCours emprunt3 = new EmpruntEnCours(idexemplaire3, idutilisateur, dateEmprunt3);
-
-		try {
-
-			System.out.println("-------------------------------------");
-			System.out.println(" CREATION D'UN EMPRUNT D'UN EXEMPLAIRE !");
-			System.out.println("-------------------------------------");
-
-			listEmprunt = insert.findAll();
-			int count = Collections.frequency(listEmprunt, idutilisateur);
-
-			if (count >= 3) {
-
-				throw new Exception("3 emprunt maximum !!!");
-			} else {
-				insert.insertEmpruntEnCours(emprunt);
-
-				System.out.println(emprunt);
+				return;
 			}
 
-			System.out.println("-------------------------------------");
+			if (maxRetard > 15) {
+				Util.print("Vous avez dépassé un retard de 15 jours sur un ancien emprunt !");
+				Util.print("Vous n'êtes plus autorisé à emprunter !");
+				Util.print("Au revoir !");
 
-			if (count >= 3) {
-
-				throw new Exception("3 emprunt maximum !!!");
-			} else {
-				insert.insertEmpruntEnCours(emprunt2);
-
-				System.out.println(emprunt2);
-
-			}
-			System.out.println("-------------------------------------");
-
-			if (count >= 3) {
-
-				throw new Exception("3 emprunt maximum !!!");
-			} else {
-				insert.insertEmpruntEnCours(emprunt3);
-
-				System.out.println(emprunt3);
-
+				return;
 			}
 
-			// System.out.println("Emprunt créé : " +
-			// insert.findByKey(emprunt.getIdExemplaire()));
+			empruntDao.insertEmpruntEnCours(new EmpruntEnCours(idUtilisateur, idExemplaire, dateNow));
+			exemplaireDao.changeStatusByExemplaireId(idExemplaire, false);
 
-			System.out.println("\n EMPRUNT confirmé !");
+			Util.print("Le livre est à vous !");
+			Util.print("Au revoir !");
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return;
 		}
-
-		try {
-			System.out.println("-------------------------------------");
-			System.out.println(" EMPRUNT PAR ID_EXEMPLAIRE !");
-			System.out.println("-------------------------------------");
-			emprunt = insert.findByKey();
-			System.out.println(emprunt);
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		System.out.println("-------------------------------------");
-		System.out.println(" EMPRUNT_EN_COURS !");
-		System.out.println("-------------------------------------");
-
-		try {
-			listEmprunt = insert.findAll();
-			int count = Collections.frequency(listEmprunt, 1);
-
-			System.out.println(listEmprunt);
-			System.out.println("count = " + count);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	public String getDriver() {
@@ -191,14 +109,6 @@ public class Emprunter {
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public String getUser() {
-		return user;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
 	}
 
 	public String getPwd() {

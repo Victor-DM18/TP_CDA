@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.sql.Statement"/>
+    <fullyQualifiedTypeName name="java.sql.DriverManager"/>
+    <fullyQualifiedTypeName name="biblio.dao.ConnectionFactory"/>
+    <fullyQualifiedTypeName name="java.sql.Connection"/>
+    <fullyQualifiedTypeName name="java.sql.SQLException"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="java.io.InputStream"/>
+    <fullyQualifiedTypeName name="java.util.Properties"/>
+    <fullyQualifiedTypeName name="biblio.dao.ExemplaireDAO"/>
+    <fullyQualifiedTypeName name="biblio.dao.UtilisateurDao"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+    <fullyQualifiedTypeName name="biblio.domain.Adherent"/>
+    <fullyQualifiedTypeName name="biblio.domain.EnumCategorieEmploye"/>
+    <fullyQualifiedTypeName name="biblio.domain.Employe"/>
+    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
+    <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="java.util.Set"/>
+    <fullyQualifiedTypeName name="biblio.domain.EnumStatusExemplaire"/>
+    <fullyQualifiedTypeName name="java.util.Collections"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="biblio.domain.EmpruntArchive"/>
+    <fullyQualifiedTypeName name="java.sql.Timestamp"/>
+    <fullyQualifiedTypeName name="biblio.domain.EmpruntEnCours"/>
+    <fullyQualifiedTypeName name="java.sql.Date"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="biblio.domain.Exemplaire"/>
+    <fullyQualifiedTypeName name="biblio.domain.Utilisateur"/>
+    <fullyQualifiedTypeName name="biblio.control.Emprunter"/>
+    <fullyQualifiedTypeName name="biblio.control.Util"/>
+</qualifiedTypeNameHistroy>

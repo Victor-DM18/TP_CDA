@@ -1,0 +1,86 @@
+package biblio.domain;
+
+import java.sql.Date;
+
+public class EmpruntEnCours {
+	
+	//private Exemplaire idExemplaire;
+	private int idExemplaire;
+	//private Utilisateur idUtilisateur;
+	private   int idUtilisateur;
+	private Date dateEmprunt;
+	
+	
+	
+
+
+	public EmpruntEnCours() {
+		super();
+	}
+
+
+
+	public EmpruntEnCours(int idExemplaire, int idUtilisateur, Date dateEmprunt) {
+		super();
+		this.idExemplaire = idExemplaire;
+		this.idUtilisateur = idUtilisateur;
+		this.dateEmprunt = dateEmprunt;
+	}
+
+
+
+	/*
+	 * public EmpruntEnCours(Exemplaire idExemplaire, Utilisateur idUtilisateur,
+	 * Date dateEmprunt) { this.setIdExemplaire(idExemplaire);
+	 * this.setIdUtilisateur(idUtilisateur); this.setDateEmprunt(dateEmprunt); }
+	 */
+	
+	
+	
+	public int getIdExemplaire() {
+		return idExemplaire;
+	}
+
+
+
+	public   int getIdUtilisateur() {
+		return idUtilisateur;
+	}
+
+
+
+	public void setIdExemplaire(int idExemplaire) {
+		this.idExemplaire = idExemplaire;
+	}
+
+	public void setIdUtilisateur(int idUtilisateur) {
+		EmpruntEnCours.idUtilisateur = idUtilisateur;
+	}
+	/*
+	 * public Exemplaire getIdExemplaire() { return idExemplaire; }
+	 * 
+	 * public void setIdExemplaire(Exemplaire idExemplaire) { this.idExemplaire =
+	 * idExemplaire; }
+	 * 
+	 * public Utilisateur getIdUtilisateur() { return idUtilisateur; }
+	 * 
+	 * public void setIdUtilisateur(Utilisateur idUtilisateur) { this.idUtilisateur
+	 * = idUtilisateur; }
+	 */
+
+	public Date getDateEmprunt() {
+		return dateEmprunt;
+	}
+
+	public void setDateEmprunt(Date dateEmprunt) {
+		this.dateEmprunt = dateEmprunt;
+	}
+
+	@Override
+	public String toString() {
+		return "\n\nEmpruntEnCours \nidExemplaire = " + idExemplaire + "\nidUtilisateur = " + idUtilisateur + "\ndateEmprunt = "
+				+ dateEmprunt + "\n\n";
+	}
+
+	
+}

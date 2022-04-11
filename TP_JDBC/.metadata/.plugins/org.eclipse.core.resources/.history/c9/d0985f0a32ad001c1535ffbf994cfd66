@@ -1,0 +1,72 @@
+package domain;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class ExempleTraitementDuTemps {
+
+	public static void main(String[] args) {
+
+		Properties props = new Properties();
+		try (FileReader fis = new FileReader("conf.properties")) {
+			props.load(fis);
+
+			Class.forName(props.getProperty("jdbc.driver.class"));
+		} catch (ClassNotFoundException | IOException e) {
+			System.out.println("Driver inconnu - " + e.getMessage());
+			System.exit(1);
+		}
+
+		String dbUrl = props.getProperty("jdbc.url");
+		String dbLogin = props.getProperty("jdbc.login");
+		String dbPwd = props.getProperty("jdbc.password");
+
+		try (Connection cnx = DriverManager.getConnection(dbUrl, dbLogin, dbPwd)) {
+
+			cnx.setAutoCommit(false);
+
+			System.out.println("-------------------------------------");
+			System.out.println("VOUS ETE CONNECTÉ !");
+			System.out.println("-------------------------------------");
+
+			String req = "CREATE TABLE LeTemps" +
+			"(id INTEGER NOT NULL,"
+					+ "laDate DATE AS (CONVERT(varchar(15), dt, 103))" +
+			"Heure DATE AS (CONVERT(varchar(15), dt, 108))"
+					+ "laDateEtHeure DATE AS CONVERT(varchar(30), dt, 120))"+
+			"laDateEtHeure2 TIMESTAMP(3) AS (CONVERT(varchar(50), dt, 131*)))";
+			
+			
+			try (PreparedStatement stmt = cnx.prepareStatement(req)) {
+				stmt.executeUpdate();	
+			
+				System.out.println("-------------------------------------");
+				System.out.println("VERIFICATION DE LA TABLE LeTemps");
+				System.out.println("-------------------------------------");
+				
+				String req2 = "SDESCRIBE LeTemps" ;
+				try (PreparedStatement stmt2 = cnx.prepareStatement(req2)) {
+
+				
+				ResultSet rs = stmt2.executeQuery();	
+				
+				while(rs.next()) {
+					System.out.println(rs);
+
+				}
+				
+				cnx.rollback();
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Erreur accès DB - " + e.getMessage());
+			System.exit(0);
+		}
+	}
+}

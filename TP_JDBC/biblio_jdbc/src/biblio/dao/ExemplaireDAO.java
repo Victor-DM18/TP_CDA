@@ -18,8 +18,17 @@ public class ExemplaireDAO {
 	public ExemplaireDAO(Connection cnx1) {
 		this.cnx1 = cnx1;
 	}
+	
+	public void changeStatusByExemplaireId(int idExemplaire, boolean disponible) throws SQLException {
+		String req = "UPDATE exemplaire SET status = ? WHERE idExemplaire = ?";
+		PreparedStatement statement = cnx1.prepareStatement(req);
+		
+		statement.setString(1, disponible ?  "DISPONIBLE" :  "PRETE");
+		statement.setInt(2, idExemplaire);
+		statement.executeUpdate();
+	}
 
-	public Exemplaire findByKey() throws SQLException {
+	public Exemplaire findByKey(int idExemplaire) throws SQLException {
 		
 		Exemplaire ex = null;
 
@@ -27,7 +36,7 @@ public class ExemplaireDAO {
 		PreparedStatement stmt1 = cnx1.prepareStatement(req1);
 		ResultSet rs1 = null;
 		
-		stmt1.setString(1, JOptionPane.showInputDialog("entrez un identifiant exemplaire"));
+		stmt1.setInt(1, idExemplaire);
 		
 		
 		if (stmt1.execute()) {

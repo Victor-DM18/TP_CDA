@@ -15,9 +15,15 @@ public class Utilisateur {
 	private String categorieUtilisateur;
 	
 	
-	Set<EmpruntEnCours> emp;
+	//Set<EmpruntEnCours> emp;
 
 	
+	
+	public Utilisateur() {
+		super();
+	}
+
+
 	public Utilisateur(int idUtilisateur, String nom, String prenom, String pwd, String pseudonyme, Date dateNaissance,
 			String sexe, String categorieUtilisateur) {
 		

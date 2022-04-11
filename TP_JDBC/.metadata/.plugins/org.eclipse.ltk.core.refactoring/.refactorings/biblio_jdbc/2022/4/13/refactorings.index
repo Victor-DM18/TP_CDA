@@ -1,0 +1,5 @@
+1648813151998	Rename type 'Emprunter'
+1648813233406	Encapsulate field 'driver'
+1648813239182	Encapsulate field 'url'
+1648813243220	Encapsulate field 'user'
+1648813246680	Encapsulate field 'pwd'

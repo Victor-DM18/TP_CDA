@@ -1,5 +1,6 @@
 package biblio.dao;
 
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -10,8 +11,13 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import biblio.domain.Adherent;
+import biblio.domain.Employe;
+import biblio.domain.EmpruntArchive;
 import biblio.domain.EmpruntEnCours;
+import biblio.domain.EnumCategorieEmploye;
 import biblio.domain.Exemplaire;
+import biblio.domain.Utilisateur;
 
 public class EmpruntEnCoursDao {
 
@@ -41,34 +47,33 @@ public class EmpruntEnCoursDao {
 	 * Date today = (Date) new java.util.Date(); return new
 	 * Timestamp(today.getTime());
 	 *
-
-	}
-	*/
+	 * 
+	 * }
+	 */
 
 	public boolean insertEmpruntEnCours(EmpruntEnCours emprunt) throws SQLException {
-		
-	
-		
-		//String insert = "INSERT INTO EmpruntEnCours emp VALUES(seq_exemplaire.currval, seq_utilisateur.currval, ?) ";
+
+		// String insert = "INSERT INTO EmpruntEnCours emp
+		// VALUES(seq_exemplaire.currval, seq_utilisateur.currval, ?) ";
 		String insert = "INSERT INTO EmpruntEnCours VALUES(?, ?, ?) ";
-		//String insert = "INSERT INTO EmpruntEnCours (?, ?, ?) EXCEPT SELECT idExemplaire FROM Exemplaire WHERE status LIKE 'DISPONIBLE' ";
+		// String insert = "INSERT INTO EmpruntEnCours (?, ?, ?) EXCEPT SELECT
+		// idExemplaire FROM Exemplaire WHERE status LIKE 'DISPONIBLE' ";
 
 		PreparedStatement stmt = cnx1.prepareStatement(insert);
 
-		//stmt.setString(1, JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a emprunter"));
-		//stmt.setString(2, JOptionPane.showInputDialog("Entrez l'id d'un Utilisateur"));
-		//stmt.setTimestamp(3, getCurrentTimeStamp());
-		
+		// stmt.setString(1, JOptionPane.showInputDialog("Entrez l'id de l'exemplaire a
+		// emprunter"));
+		// stmt.setString(2, JOptionPane.showInputDialog("Entrez l'id d'un
+		// Utilisateur"));
+		// stmt.setTimestamp(3, getCurrentTimeStamp());
+
 		stmt.setInt(1, emprunt.getIdExemplaire());
 		stmt.setInt(2, emprunt.getIdUtilisateur());
 		stmt.setDate(3, emprunt.getDateEmprunt());
 
 		stmt.executeUpdate();
-		
-		
-			
 
-				/*
+		/*
 		 * ResultSet rs = stmt.getGeneratedKeys();
 		 * 
 		 * if (rs.next()) { res = rs.getInt(1); } rs.close(); stmt.close(); return res;
@@ -76,28 +81,50 @@ public class EmpruntEnCoursDao {
 		return false;
 
 	}
-	
-	public EmpruntEnCours findByKey() throws SQLException {
-		
-		EmpruntEnCours ecc = null;
-		
-		String req = " SELECT  idExemplaire,"
-				+ " idUtilisateur,"
-				+ " dateEmprunt FROM empruntencours WHERE idExemplaire = ? " ;
-		
-		PreparedStatement stmt3 = cnx1.prepareStatement(req);
-		
-		ResultSet rs3 = null;
-		//stmt3.setInt(1, idExemplaire);
-		stmt3.setString(1, JOptionPane.showInputDialog("entrez un identifiant exemplaire emprunté : "));
 
+	public boolean isAvailable(int idExemplaire) throws SQLException {
+		String req = "SELECT 1 FROM empruntencours WHERE idExemplaire = ?";
+		PreparedStatement statement = cnx1.prepareStatement(req);
 		
-		if(stmt3.execute()) {
+		statement.setInt(1, idExemplaire);
+		statement.execute();
+
+		ResultSet result = statement.getResultSet();
+
+		return !result.next();
+	}
+
+	public int countByUtilisateurId(int idUtilisateur) throws SQLException {
+		String req = "SELECT COUNT(idUtilisateur) AS nbrEmprunt FROM empruntencours WHERE idUtilisateur = ?";
+		PreparedStatement statement = cnx1.prepareStatement(req);
+
+		statement.setInt(1, idUtilisateur);
+		statement.execute();
+
+		ResultSet result = statement.getResultSet();
+		result.next();
+
+		return result.getInt("nbrEmprunt");
+	}
+
+	public EmpruntEnCours findByKey(int idExemplaire) throws SQLException {
+
+		EmpruntEnCours ecc = null;
+		String req = "SELECT idExemplaire, idUtilisateur, dateEmprunt FROM empruntencours WHERE idExemplaire = ?";
+
+		PreparedStatement stmt3 = cnx1.prepareStatement(req);
+
+		ResultSet rs3 = null;
+		// stmt3.setInt(1, idExemplaire);
+		stmt3.setInt(1, idExemplaire);
+
+		if (stmt3.execute()) {
 			rs3 = stmt3.getResultSet();
-			
-			if(rs3.next()) {
-				
-				ecc = new EmpruntEnCours(rs3.getInt("idExemplaire"), rs3.getInt("idUtilisateur"), rs3.getDate("dateEmprunt"));
+
+			if (rs3.next()) {
+
+				ecc = new EmpruntEnCours(rs3.getInt("idExemplaire"), rs3.getInt("idUtilisateur"),
+						rs3.getDate("dateEmprunt"));
 			}
 		}
 		return ecc;
@@ -118,11 +145,167 @@ public class EmpruntEnCoursDao {
 			int idExemplaire = rs2.getInt("idExemplaire");
 			int idUtilisateur = rs2.getInt("idUtilisateur");
 			Date dateEmprunt = rs2.getDate("dateEmprunt");
-			
 
 			EmpruntEnCours em = new EmpruntEnCours(idExemplaire, idUtilisateur, dateEmprunt);
 			listEmprunt.add(em);
 		}
 		return listEmprunt;
+	}
+
+	public boolean UpdateExemplaire(Exemplaire up) throws SQLException {
+
+		String update = "UPDATE  exemplaire SET status = 'PRETE' WHERE idExemplaire = ? ";
+
+		PreparedStatement stmt4 = cnx1.prepareStatement(update);
+		stmt4.setInt(1, up.getIdExemplaire());
+
+		int Result = stmt4.executeUpdate();
+
+		return Result > 0;
+
+	}
+
+	public ArrayList<EmpruntEnCours> findByUtilisateur(int idUtilisateur) throws SQLException {
+
+		ArrayList<EmpruntEnCours> listEmp = new ArrayList<EmpruntEnCours>();
+
+		String req = " SELECT * FROM EmpruntEnCours WHERE idUtilisateur =  ? ";
+
+		PreparedStatement stmt = cnx1.prepareStatement(req);
+
+		// stmt3.setInt(1, idExemplaire);
+		stmt.setInt(1, idUtilisateur);
+
+		ResultSet rs4 = stmt.executeQuery();
+
+		while (rs4.next()) {
+
+			int idExemplaire = rs4.getInt("idExemplaire");
+			Date dateEmprunt = rs4.getDate("dateEmprunt");
+
+			EmpruntEnCours emp = new EmpruntEnCours(idExemplaire, idUtilisateur, dateEmprunt);
+			listEmp.add(emp);
+		}
+		return listEmp;
+	}
+
+	public Utilisateur findByUi(int idUtilisateur) {
+
+		String req = "select *"
+				+ " FROM utilisateur ui, adherent ad, employe emp WHERE ui.idUtilisateur = ad.idUtilisateur(+) AND ui.idUtilisateur = emp.idUtilisateur(+) AND ui.idUtilisateur = ? ";
+
+		try (PreparedStatement stmt1 = cnx1.prepareStatement(req)) {
+			stmt1.setInt(1, idUtilisateur);
+			ResultSet rs1 = stmt1.executeQuery();
+
+			Utilisateur ui = null;
+
+			boolean next = rs1.next();
+
+			if (next) {
+
+				String nom = rs1.getString("nom");
+				String prenom = rs1.getString("prenom");
+				String pwd = rs1.getString("pwd");
+				String pseudonyme = rs1.getString("pseudonyme");
+				Date dateNaissance = rs1.getDate("dateNaissance");
+				String sexe = rs1.getString("sexe");
+				String categorieUtilisateur = rs1.getString("categorieUtilisateur");
+
+				/*
+				 * ui = new Utilisateur(idutilisateur, nom, prenom, pwd, pseudonyme,
+				 * dateNaissance, sexe, categorieUtilisateur);
+				 */
+
+				if (categorieUtilisateur.equals("ADHERENT")) {
+					String tel = rs1.getString("telephone");
+					ui = new Adherent(idUtilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe,
+							categorieUtilisateur, tel);
+				} else {
+
+					String codeMa = rs1.getString("codeMatricule");
+					EnumCategorieEmploye enuE = EnumCategorieEmploye.valueOf(rs1.getString("categorieEmploye"));
+
+					ui = new Employe(idUtilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe,
+							categorieUtilisateur, codeMa, enuE);
+
+				}
+
+				return ui;
+			} else {
+				ui = null;
+			}
+
+			return ui;
+		} catch (HeadlessException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	public ArrayList<EmpruntArchive> findAllArchive(int idUtilisateur) throws SQLException {
+
+		ArrayList<EmpruntArchive> listArchive = new ArrayList<EmpruntArchive>();
+
+		String req = " SELECT  idEmpruntArchive,  dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur FROM empruntArchive WHERE idUtilisateur = ? ";
+
+		PreparedStatement stmt = cnx1.prepareStatement(req);
+
+		// stmt3.setInt(1, idExemplaire);
+		stmt.setInt(1, idUtilisateur);
+
+		ResultSet rs = stmt.executeQuery();
+
+		while (rs.next()) {
+
+			int idEmpruntArchive = rs.getInt("idEmpruntArchive");
+			Date dateEmprunt = rs.getDate("dateEmprunt");
+			Date dateRestitutionEff = rs.getDate("dateRestitutionEff");
+			int idExemplaire = rs.getInt("idExemplaire");
+
+			EmpruntArchive ear = new EmpruntArchive(idEmpruntArchive, dateEmprunt, dateRestitutionEff, idExemplaire,
+					idUtilisateur);
+			listArchive.add(ear);
+
+		}
+		return listArchive;
+	}
+
+	public EmpruntArchive findByKeyArchive(int idUtilisateur) throws SQLException {
+
+		EmpruntArchive ear = null;
+
+		String req = " SELECT  idEmpruntArchive," + " dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur"
+				+ " FROM empruntArchive WHERE idEmpruntArchive = ? ";
+
+		PreparedStatement stmt = cnx1.prepareStatement(req);
+
+		// stmt3.setInt(1, idExemplaire);
+		stmt.setInt(1, idUtilisateur);
+
+		ResultSet rs = stmt.executeQuery();
+
+		boolean next = rs.next();
+
+		if (next) {
+
+			int idEmpruntArchive = rs.getInt("idEmpruntArchive");
+			Date dateEmprunt = rs.getDate("dateEmprunt");
+			Date dateRestitutionEff = rs.getDate("dateRestitutionEff");
+			int idExemplaire = rs.getInt("idExemplaire");
+
+			if (stmt.execute()) {
+				rs = stmt.getResultSet();
+
+				if (rs.next()) {
+
+					ear = new EmpruntArchive(idEmpruntArchive, dateEmprunt, dateRestitutionEff, idExemplaire,
+							idUtilisateur);
+				}
+			}
+		}
+		return ear;
 	}
 }

@@ -18,6 +18,14 @@ public class Exemplaire  {
 	 */
 	
 	Set<EmpruntEnCours> emp;
+	
+	
+
+	public Exemplaire() {
+		super();
+	}
+
+
 
 	public Exemplaire(int idexemplaire2, Date dateAchat, EnumStatusExemplaire enumStatus, Livre isbn ) {
 		this.setIdExemplaire( idexemplaire2);

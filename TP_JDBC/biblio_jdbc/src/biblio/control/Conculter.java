@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import javax.swing.JOptionPane;
 
 import biblio.dao.ConnectionFactory;
 import biblio.dao.ExemplaireDAO;
@@ -49,27 +50,47 @@ public class Conculter {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		String idExemplaire = JOptionPane.showInputDialog("Entrez l'id de l'exemplaire 1 : ");
+		int idexemplaire = Integer.parseInt(idExemplaire);
+		
+		String idExemplaire2 = JOptionPane.showInputDialog("Entrez l'id de l'exemplaire 2 : ");
+		int idexemplaire2 = Integer.parseInt(idExemplaire2);
 
 		ExemplaireDAO exDAO = new ExemplaireDAO(cnx1);
 		Exemplaire ex = null;
+		Exemplaire ex2 = null;
+
 		ArrayList<Exemplaire> listeExemplaire = new ArrayList<Exemplaire>();
 		listeExemplaire = null;
 
 		try {
 
-			System.out.println("-------------------------------------");
-			System.out.println(" EXEMPLAIRE !");
-			System.out.println("-------------------------------------");
 
-			ex = exDAO.findByKey();
+
+			ex = exDAO.findByKey(idexemplaire);
+			ex2 = exDAO.findByKey(idexemplaire2);
+
 			listeExemplaire = exDAO.findAll();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
+		System.out.println("-------------------------------------");
+		System.out.println(" EXEMPLAIRE 1 : ");
+		System.out.println("-------------------------------------");
 		System.out.println(ex);
+		
+		System.out.println("-------------------------------------");
+		System.out.println(" EXEMPLAIRE 2 : ");
+		System.out.println("-------------------------------------");
+		System.out.println(ex2);
 
+		System.out.println("-------------------------------------");
+		System.out.println(" LISTE EXEMPLAIRE : ");
+		System.out.println("-------------------------------------");
+		
 		System.out.println(listeExemplaire);
 
 		UtilisateurDao uiDAO = new UtilisateurDao(cnx1);

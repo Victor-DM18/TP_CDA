@@ -1,0 +1,177 @@
+package biblio.dao;
+
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
+import biblio.domain.Adherent;
+import biblio.domain.Employe;
+import biblio.domain.EnumCategorieEmploye;
+import biblio.domain.Utilisateur;
+
+public class UtilisateurDao {
+
+	Connection cnx1 = null;
+
+	public UtilisateurDao(Connection cnx1) {
+		this.cnx1 = cnx1;
+	}
+
+	/**
+	 * @return the cnx1
+	 */
+	public Connection getCn() {
+		return cnx1;
+	}
+
+	/**
+	 * @param cnx1 the cnx1 to set
+	 */
+	public void setCn(Connection cnx1) {
+		this.cnx1 = cnx1;
+	}
+
+	public Utilisateur findById(int idUtilisateur) throws SQLException {
+		String req = "SELECT *" + " FROM utilisateur AS u, adherent AS a, employe AS e"
+				+ " WHERE u.idUtilisateur = a.idUtilisateur(+) AND u.idUtilsateur = e.idUtilisateur(+)"
+				+ " AND u.idUtilisateur =  ?";
+
+		PreparedStatement statment = cnx1.prepareStatement(req);
+
+		statment.setInt(1, idUtilisateur);
+
+		ResultSet result = statment.executeQuery();
+
+		if (!result.next()) {
+			return null;
+		}
+		return new Utilisateur(
+				//int idUtilisateur, String nom, String prenom, String pwd, String pseudonyme, Date dateNaissance,
+				//String sexe, String categorieUtilisateur
+				idUtilisateur, result.getString("nom"), result.getString("prenom"), result.getString("pwd"), result.getString("pseudonyme"),
+				result.getDate("dateNaissance"), result.getString("sex"), result.getString("categorieUtilisateur")
+		);
+	}
+
+	public Utilisateur findByKey() {
+
+		String req = "select *"
+				+ " FROM utilisateur ui, adherent ad, employe emp WHERE ui.idUtilisateur = ad.idUtilisateur(+) AND ui.idUtilisateur = emp.idUtilisateur(+) AND ui.idUtilisateur = ? ";
+
+		try (PreparedStatement stmt1 = cnx1.prepareStatement(req)) {
+			stmt1.setString(1, JOptionPane.showInputDialog("entrez un identifiant d'utilisateur"));
+			ResultSet rs1 = stmt1.executeQuery();
+
+			Utilisateur ui = null;
+
+			boolean next = rs1.next();
+
+			if (next) {
+
+				int idutilisateur = rs1.getInt("idUtilisateur");
+				String nom = rs1.getString("nom");
+				String prenom = rs1.getString("prenom");
+				String pwd = rs1.getString("pwd");
+				String pseudonyme = rs1.getString("pseudonyme");
+				Date dateNaissance = rs1.getDate("dateNaissance");
+				String sexe = rs1.getString("sexe");
+				String categorieUtilisateur = rs1.getString("categorieUtilisateur");
+
+				/*
+				 * ui = new Utilisateur(idutilisateur, nom, prenom, pwd, pseudonyme,
+				 * dateNaissance, sexe, categorieUtilisateur);
+				 */
+
+				if (categorieUtilisateur.equals("ADHERENT")) {
+					String tel = rs1.getString("telephone");
+					ui = new Adherent(idutilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe,
+							categorieUtilisateur, tel);
+				} else {
+
+					String codeMa = rs1.getString("codeMatricule");
+					EnumCategorieEmploye enuE = EnumCategorieEmploye.valueOf(rs1.getString("categorieEmploye"));
+
+					ui = new Employe(idutilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe,
+							categorieUtilisateur, codeMa, enuE);
+
+				}
+
+				return ui;
+			} else {
+				ui = null;
+			}
+
+			return ui;
+		} catch (HeadlessException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	public ArrayList<Utilisateur> findAll() {
+
+		String req2 = "SELECT * from utilisateur ui, employe emp, adherent ad WHERE ui.idUtilisateur =  emp.IdUtilisateur(+) AND ui.idUtilisateur = ad.IdUtilisateur(+)";
+
+		try (PreparedStatement stmt1 = cnx1.prepareStatement(req2)) {
+			ArrayList<Utilisateur> listeUtilisateur = new ArrayList<Utilisateur>();
+
+			// ResultSet rs2 = stmt1.executeQuery("select * from utilisateur");
+			ResultSet rs2 = stmt1.executeQuery();
+
+			while (rs2.next()) {
+
+				int idutilisateur = rs2.getInt(1);
+				String nom = rs2.getString(2);
+				String prenom = rs2.getString(3);
+				String pwd = rs2.getString(4);
+				String pseudonyme = rs2.getString(5);
+				Date dateNaissance = rs2.getDate(6);
+				String sexe = rs2.getString(7);
+				String categorieUtilisateur = rs2.getString(8);
+
+				Utilisateur ui = null;
+
+				if (categorieUtilisateur.equals("ADHERENT")) {
+					String tel = rs2.getString("telephone");
+					ui = new Adherent(idutilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe,
+							categorieUtilisateur, tel);
+				} else {
+
+					String codeMa = rs2.getString("codeMatricule");
+					EnumCategorieEmploye enuE = EnumCategorieEmploye.valueOf(rs2.getString("categorieEmploye"));
+
+					ui = new Employe(idutilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe,
+							categorieUtilisateur, codeMa, enuE);
+
+				}
+
+				/*
+				 * System.out.println("ID utilisateur : " + idutilisateur + " Nom : " + nom +
+				 * " Prenom : " + prenom + " Password : " + pwd + " Pseudo : " + pseudonyme +
+				 * " Date de naissance : " + dateNaissance + " Sexe : " + sexe +
+				 * " Categorie Utilisateur : " + categorieUtilisateur);
+				 */
+
+				// Utilisateur ui = new Utilisateur(idutilisateur, nom, prenom, pwd, pseudonyme,
+				// dateNaissance, sexe, categorieUtilisateur);
+
+				listeUtilisateur.add(ui);
+			}
+
+			return listeUtilisateur;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}

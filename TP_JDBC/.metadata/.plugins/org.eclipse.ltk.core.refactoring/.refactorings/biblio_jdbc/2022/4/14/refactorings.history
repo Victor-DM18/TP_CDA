@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;user&apos; in &apos;biblio.control.Emprunter&apos; to &apos;utilisateur&apos;&#x0D;&#x0A;- Original project: &apos;biblio_jdbc&apos;&#x0D;&#x0A;- Original element: &apos;biblio.control.Emprunter.user&apos;&#x0D;&#x0A;- Renamed element: &apos;biblio.control.Emprunter.utilisateur&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;user&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;biblio.control{Emprunter.java[Emprunter^user" name="utilisateur" references="true" setter="false" stamp="1649435493975" textual="false" version="1.0"/>
+</session>

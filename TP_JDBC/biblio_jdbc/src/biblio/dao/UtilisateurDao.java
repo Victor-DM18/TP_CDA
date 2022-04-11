@@ -37,7 +37,24 @@ public class UtilisateurDao {
 		this.cnx1 = cnx1;
 	}
 
-	public Utilisateur findByKey()   {
+	public Utilisateur findById(int idUtilisateur) throws SQLException {
+		String req = "SELECT * FROM utilisateur WHERE idUtilisateur = ?";
+		PreparedStatement statement = cnx1.prepareStatement(req);
+
+		statement.setInt(1, idUtilisateur);
+
+		ResultSet result = statement.executeQuery();
+
+		if (!result.next()) {
+			return null;
+		}
+
+		return new Utilisateur(idUtilisateur, result.getString("nom"), result.getString("prenom"),
+				result.getString("pwd"), result.getString("pseudonyme"), result.getDate("dateNaissance"),
+				result.getString("sexe"), result.getString("categorieUtilisateur"));
+	}
+
+	public Utilisateur findByKey() {
 
 		String req = "select *"
 				+ " FROM utilisateur ui, adherent ad, employe emp WHERE ui.idUtilisateur = ad.idUtilisateur(+) AND ui.idUtilisateur = emp.idUtilisateur(+) AND ui.idUtilisateur = ? ";
@@ -75,8 +92,8 @@ public class UtilisateurDao {
 					String codeMa = rs1.getString("codeMatricule");
 					EnumCategorieEmploye enuE = EnumCategorieEmploye.valueOf(rs1.getString("categorieEmploye"));
 
-					ui = new Employe(idutilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe, categorieUtilisateur,
-							codeMa, enuE);
+					ui = new Employe(idutilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe,
+							categorieUtilisateur, codeMa, enuE);
 
 				}
 
@@ -94,7 +111,7 @@ public class UtilisateurDao {
 
 	}
 
-	public ArrayList<Utilisateur> findAll()  {
+	public ArrayList<Utilisateur> findAll() {
 
 		String req2 = "SELECT * from utilisateur ui, employe emp, adherent ad WHERE ui.idUtilisateur =  emp.IdUtilisateur(+) AND ui.idUtilisateur = ad.IdUtilisateur(+)";
 
@@ -126,8 +143,8 @@ public class UtilisateurDao {
 					String codeMa = rs2.getString("codeMatricule");
 					EnumCategorieEmploye enuE = EnumCategorieEmploye.valueOf(rs2.getString("categorieEmploye"));
 
-					ui = new Employe(idutilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe, categorieUtilisateur,
-							codeMa, enuE);
+					ui = new Employe(idutilisateur, nom, prenom, pwd, pseudonyme, dateNaissance, sexe,
+							categorieUtilisateur, codeMa, enuE);
 
 				}
 

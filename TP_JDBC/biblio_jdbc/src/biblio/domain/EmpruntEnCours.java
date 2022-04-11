@@ -7,16 +7,32 @@ public class EmpruntEnCours {
 	//private Exemplaire idExemplaire;
 	private int idExemplaire;
 	//private Utilisateur idUtilisateur;
-	private static  int idUtilisateur;
+	private   int idUtilisateur;
 	private Date dateEmprunt;
 	
 	
+	
+
+
+	public EmpruntEnCours() {
+		super();
+	}
+
+	
+
+
+	public EmpruntEnCours(int idUtilisateur) {
+		super();
+		this.idUtilisateur = idUtilisateur;
+	}
+
+
 
 
 	public EmpruntEnCours(int idExemplaire, int idUtilisateur, Date dateEmprunt) {
 		super();
 		this.idExemplaire = idExemplaire;
-		EmpruntEnCours.idUtilisateur = idUtilisateur;
+		this.idUtilisateur = idUtilisateur;
 		this.dateEmprunt = dateEmprunt;
 	}
 
@@ -36,7 +52,7 @@ public class EmpruntEnCours {
 
 
 
-	public static  int getIdUtilisateur() {
+	public   int getIdUtilisateur() {
 		return idUtilisateur;
 	}
 
@@ -47,7 +63,7 @@ public class EmpruntEnCours {
 	}
 
 	public void setIdUtilisateur(int idUtilisateur) {
-		EmpruntEnCours.idUtilisateur = idUtilisateur;
+		this.idUtilisateur = idUtilisateur;
 	}
 	/*
 	 * public Exemplaire getIdExemplaire() { return idExemplaire; }

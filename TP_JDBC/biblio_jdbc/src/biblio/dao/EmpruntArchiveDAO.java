@@ -5,11 +5,13 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import biblio.control.Retour;
 import biblio.domain.EmpruntArchive;
 import biblio.domain.EmpruntEnCours;
 import biblio.domain.Exemplaire;
@@ -37,7 +39,20 @@ public class EmpruntArchiveDAO {
 		this.cnx1 = cnx1;
 	}
 
-	public EmpruntArchive findByKey() throws SQLException {
+	public int compterMaxRetardParUtilisateurId(int idUtilisiateur) throws SQLException {
+		String req = "SELECT TRUNC(MAX(DATERESTITUTIONEFF - DATEEMPRUNT)) AS maxRetard FROM empruntArchive WHERE idUtilisateur = ?";
+		PreparedStatement statement = cnx1.prepareStatement(req);
+		
+		statement.setInt(1, idUtilisiateur);
+		
+		ResultSet result = statement.executeQuery();
+		
+		result.next();
+		
+		return result.getInt("maxRetard");
+	}
+	
+	public EmpruntArchive findByKey(int idEmpruntArchive) throws SQLException {
 
 		EmpruntArchive ear = null;
 
@@ -47,7 +62,7 @@ public class EmpruntArchiveDAO {
 		PreparedStatement stmt = cnx1.prepareStatement(req);
 
 		// stmt3.setInt(1, idExemplaire);
-		stmt.setString(1, JOptionPane.showInputDialog("entrez un identifiant de retour : "));
+		stmt.setInt(1,idEmpruntArchive);
 
 		ResultSet rs = stmt.executeQuery();
 
@@ -55,7 +70,6 @@ public class EmpruntArchiveDAO {
 
 		if (next) {
 
-			int idEmpruntArchive = rs.getInt("idEmpruntArchive");
 			Date dateEmprunt = rs.getDate("dateEmprunt");
 			Date dateRestitutionEff = rs.getDate("dateRestitutionEff");
 			int idExemplaire = rs.getInt("idExemplaire");
@@ -74,56 +88,60 @@ public class EmpruntArchiveDAO {
 		return ear;
 	}
 
-	public Integer insertArchive(EmpruntArchive retour) throws SQLException {
+	public Integer insertArchive( EmpruntEnCours retour) throws SQLException {
 
 		Integer inserted = null;
 
-		String insert = "INSERT INTO empruntArchive (idEmpruntArchive, dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur) VALUES(seq_archive.nextval, "
-				+ "?, ?, ?, ?)";
-		//String insert = "INSERT INTO empruntArchive (idEmpruntArchive, dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur) VALUES(seq_archive.nextval, ?, ?, ?, ?) SELECT ar.idEmpruntArchive, emp.dateEmprunt, ar.dateRestitutionEff, emp.ideExemplaire, emp.idUtilisateur FROM EmpruntEnCours emp, EmpruntArchive ar WHERE ar.idExemplaire= emp.idExemplaire ";
-
-		// String insert = "INSERT INTO empruntArchive ea VALUES(?, ?, ?, ?, ?)";
-
-		PreparedStatement stmt3 = cnx1.prepareStatement(insert, new String[] { "idEmpruntArchive" });
-		// PreparedStatement stmt3 = cnx1.prepareStatement(insert);
-
-		// stmt3.setInt(1, retour.getIdEmpruntArchive());
-		
-		Date date = new Date(System.currentTimeMillis());
 
 		
-		stmt3.setDate(1, retour.getDateEmprunt());
-		stmt3.setDate(2, date);
-		stmt3.setInt(3, retour.getIdExemplaire());
-		stmt3.setInt(4, retour.getIdUtilisateur());
+		String insert = "INSERT INTO EmpruntArchive VALUES(seq_archive.nextval, ?, ?, ?, ?) ";
+		//String insert = "INSERT INTO empruntArchive (idEmpruntArchive, dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur) VALUES(seq_archive.nextval, dateEmprunt, ?, ?, idUtilisateuur) SELECT ar.idEmpruntArchive, emp.dateEmprunt, ar.dateRestitutionEff, emp.ideExemplaire, emp.idUtilisateur FROM EmpruntEnCours emp, EmpruntArchive ar WHERE ar.idExemplaire= emp.idExemplaire ";
+		//String insert ="INSERT INTO EmpruntArchive  (seq_archive.nextval, dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur) SELECT idExemplaire,  dateEmprunt, idUtilisateur FROM  EmpruntEnCours WHERE idExemplaire = 3";
+		//String insert = "INSERT INTO EmpruntArchive (idEmpruntArchive, dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur) (SELECT seq_archive.nextval, dateEmprunt, ?, ?, idUtilisateur FROM EmpruntEnCours)";
+		 //String insert = "INSERT INTO EmpruntArchive VALUES(?, ?, ?, ?, ?)";
 
+		//PreparedStatement stmt3 = cnx1.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement stmt3 = cnx1.prepareStatement(insert, new String[] {"idEmpruntArchive"});
+
+		
+
+	
+		  stmt3.setDate(1, retour.getDateEmprunt());
+		  stmt3.setDate(2, new java.sql.Date(System.currentTimeMillis())); 
+		  //stmt3.setDate(1, dateRestitutionEff);
+		  stmt3.setInt(3, retour.getIdExemplaire());
+		  stmt3.setInt(4, retour.getIdUtilisateur());
+		 
 		stmt3.executeUpdate();
 
 		ResultSet rs3 = stmt3.getGeneratedKeys();
 
 		if (rs3.next()) {
-			inserted = rs3.getInt(1);
+			
+			
+			  //if (rs3.next()) {
+			//inserted = rs3.getInt(1);
 
-			/*
-			 * if (rs3.next()) {
-			 * 
-			 * inserted = new EmpruntArchive(rs3.getInt("idEmpruntArchive"),
-			 * rs3.getDate("dateEmprunt"), rs3.getDate("dateRestitutionEff"),
-			 * rs3.getInt("idExemplaire"), rs3.getInt("idUtilisateur")); }
-			 */
+			  
+			 //inserted = new EmpruntArchive(rs3.getInt("idEmpruntArchive"), rs3.getDate("dateEmprunt"), rs3.getDate("dateRestitutionEff"), rs3.getInt("idExemplaire"), rs3.getInt("idUtilisateur")); 
+		
+	
 		}
 		return inserted;
 
+		
+
 	}
 
-	public EmpruntArchive DeleteEmprunt(EmpruntArchive deleted) throws SQLException {
+
+	public EmpruntArchive DeleteEmprunt(int idExemplaire) throws SQLException {
 
 		String delete = "DELETE FROM empruntEnCours WHERE idExemplaire = ?";
 
 		PreparedStatement stmt2 = cnx1.prepareStatement(delete);
 		// stmt2.setString(1, JOptionPane.showInputDialog("entrez un identifiant
 		// d'exemplaire à rendre"));
-		stmt2.setInt(1, deleted.getIdExemplaire());
+		stmt2.setInt(1, idExemplaire);
 		stmt2.executeUpdate();
 
 		return null;
@@ -139,12 +157,12 @@ public class EmpruntArchiveDAO {
 	 * }
 	 */
 
-	public  boolean UpdateExemplaire(Exemplaire up) throws SQLException {
+	public  boolean UpdateExemplaire(int idExemplaire) throws SQLException {
 
-		String update = "UPDATE INTO Exemplaire SET status = DISPONIBLE WHERE idExemplaire = ? ";
+		String update = "UPDATE  exemplaire SET status = 'DISPONIBLE' WHERE idExemplaire = ? ";
 
 		PreparedStatement stmt4 = cnx1.prepareStatement(update);
-		stmt4.setInt(1, up.getIdExemplaire());
+		stmt4.setInt(1, idExemplaire);
 
 		int Result = stmt4.executeUpdate();
 
@@ -154,9 +172,9 @@ public class EmpruntArchiveDAO {
 
 	public ArrayList<EmpruntArchive> findAll() throws SQLException {
 
-		ArrayList<EmpruntArchive> ar = new ArrayList<EmpruntArchive>();
+		ArrayList<EmpruntArchive> ar = null;
 
-		String req = " SELECT  idEmpruntArchive," + " dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur"
+		String req = " SELECT  idEmpruntArchive,  dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur"
 				+ " FROM empruntArchive";
 
 		PreparedStatement stmt = cnx1.prepareStatement(req);
@@ -166,15 +184,20 @@ public class EmpruntArchiveDAO {
 		ResultSet rs = stmt.executeQuery();
 
 		while (rs.next()) {
+			
+			if( ar == null) {
 
-			int idEmpruntArchive = rs.getInt("idEmpruntArchive");
+/*			int idEmpruntArchive = rs.getInt("idEmpruntArchive");
 			Date dateEmprunt = rs.getDate("dateEmprunt");
 			Date dateRestitutionEff = rs.getDate("dateRestitutionEff");
 			int idExemplaire = rs.getInt("idExemplaire");
 			int idUtilisateur = rs.getInt("idUtilisateur");
-
-			EmpruntArchive ear = new EmpruntArchive(idEmpruntArchive, dateEmprunt, dateRestitutionEff, idExemplaire,
-					idUtilisateur);
+			*/
+			ar = new ArrayList<EmpruntArchive>();
+			
+			}
+			EmpruntArchive ear = new EmpruntArchive(rs.getInt("idEmpruntArchive"), rs.getDate("dateEmprunt"), rs.getDate("dateRestitutionEff"), rs.getInt("idExemplaire"),
+					rs.getInt("idUtilisateur"));
 			ar.add(ear);
 		}
 
@@ -202,6 +225,43 @@ public class EmpruntArchiveDAO {
 			listEmprunt.add(em);
 		}
 		return listEmprunt;
+	}
+	
+	
+	public EmpruntArchive findByUtilisateur(int idUtilisateur) throws SQLException {
+
+		EmpruntArchive ear = null;
+
+		String req = " SELECT  idEmpruntArchive," + " dateEmprunt, dateRestitutionEff, idExemplaire, idUtilisateur"
+				+ " FROM empruntArchive WHERE idUtilisateur =  ? ";
+
+		PreparedStatement stmt = cnx1.prepareStatement(req);
+
+		// stmt3.setInt(1, idExemplaire);
+		stmt.setInt(1, idUtilisateur);
+
+		ResultSet rs = stmt.executeQuery();
+
+		boolean next = rs.next();
+
+		if (next) {
+
+			int idEmpruntArchive = rs.getInt("idEmpruntArchive");
+			Date dateEmprunt = rs.getDate("dateEmprunt");
+			Date dateRestitutionEff = rs.getDate("dateRestitutionEff");
+			int idExemplaire = rs.getInt("idExemplaire");
+
+			if (stmt.execute()) {
+				rs = stmt.getResultSet();
+
+				if (rs.next()) {
+
+					ear = new EmpruntArchive(idEmpruntArchive, dateEmprunt, dateRestitutionEff, idExemplaire,
+							idUtilisateur);
+				}
+			}
+		}
+		return ear;
 	}
 
 }
